@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TechStore - Tu tienda online de confianza para tecnología y más">
+    <meta name="keywords" content="tienda online, compras, productos, electrónica, ropa">
+    <title>{% block titulo %}TechStore - Tienda Online{% endblock %}</title>
+    
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    {% block estilos_adicionales %}{% endblock %}
+</head>
+<body>
+    <!-- Navegación Principal -->
+    <nav class="navbar">
+        <div class="contenedor-navbar">
+            <!-- Logo de la tienda -->
+            <div class="logo">
+                <a href="/" class="logo-enlace">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>TechStore</span>
+                </a>
+            </div>
+            
+            <!-- Toggle menu móvil -->
+            <button class="toggle-menu" id="toggleMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <!-- Menú de navegación -->
+            <ul class="menu-navegacion" id="menuNavegacion">
+                <li><a href="/" class="enlace-nav {% if request.path == '/' %}activo{% endif %}">
+                    <i class="fas fa-home"></i> Inicio
+                </a></li>
+                <li><a href="/catalogo" class="enlace-nav {% if request.path == '/catalogo' %}activo{% endif %}">
+                    <i class="fas fa-th"></i> Catálogo
+                </a></li>
+                <li><a href="/categorias" class="enlace-nav {% if request.path == '/categorias' %}activo{% endif %}">
+                    <i class="fas fa-list"></i> Categorías
+                </a></li>
+                <li><a href="/acerca" class="enlace-nav {% if request.path == '/acerca' %}activo{% endif %}">
+                    <i class="fas fa-info-circle"></i> Acerca de
+                </a></li>
+            </ul>
+            
+            <!-- Carrito e Iconos -->
+            <div class="iconos-header">
+                <button class="icono-busqueda" id="abrirBusqueda" title="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="icono-carrito" title="Carrito ({{ carrito_total | default(0) }} items)">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="badge-carrito">{{ carrito_total | default(0) }}</span>
+                </button>
+                <button class="icono-usuario" title="Mi Cuenta">
+                    <i class="fas fa-user"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Barra de búsqueda expandible -->
+    <div class="barra-busqueda" id="barraBusqueda">
+        <div class="contenedor-busqueda">
+            <input type="text" id="campoBusqueda" placeholder="Buscar productos..." class="input-busqueda">
+            <button class="btn-buscar"><i class="fas fa-search"></i></button>
+            <button class="btn-cerrar-busqueda" id="cerrarBusqueda"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+    
+    <!-- Contenido principal -->
+    <main class="contenido-principal">
+        {% block contenido %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="pie-pagina">
+        <div class="contenedor-footer">
+            <!-- Columna 1: Sobre nosotros -->
+            <div class="columna-footer">
+                <h4><i class="fas fa-shopping-bag"></i> TechStore</h4>
+                <p>Tu tienda online de confianza para encontrar los mejores productos de tecnología, moda y hogar.</p>
+                <div class="redes-sociales">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <!-- Columna 2: Enlaces útiles -->
+            <div class="columna-footer">
+                <h4>Enlaces Útiles</h4>
+                <ul class="enlaces-footer">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/catalogo">Catálogo</a></li>
+                    <li><a href="/categorias">Categorías</a></li>
+                    <li><a href="/acerca">Acerca de</a></li>
+                </ul>
+            </div>
+            
+            <!-- Columna 3: Servicio al cliente -->
+            <div class="columna-footer">
+                <h4>Servicio al Cliente</h4>
+                <ul class="enlaces-footer">
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                    <li><a href="#">Política de Devoluciones</a></li>
+                    <li><a href="#">Envíos y entregas</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                </ul>
+            </div>
+            
+            <!-- Columna 4: Contacto -->
+            <div class="columna-footer">
+                <h4>Contacto</h4>
+                <div class="info-contacto">
+                    <p><i class="fas fa-envelope"></i> info@techstore.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Avenida Principal 123<br/>Ciudad, País 12345</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sección inferior del footer -->
+        <div class="footer-inferior">
+            <div class="contenedor-footer-inferior">
+                <p>&copy; {{ ano_actual }} TechStore. Todos los derechos reservados.</p>
+                <div class="metodos-pago">
+                    <span><i class="fab fa-cc-visa"></i></span>
+                    <span><i class="fab fa-cc-mastercard"></i></span>
+                    <span><i class="fas fa-university"></i></span>
+                    <span><i class="fab fa-cc-paypal"></i></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block scripts_adicionales %}{% endblock %}
+</body>
+</html>

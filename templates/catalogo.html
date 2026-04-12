@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Catálogo de Productos - TechStore{% endblock %}
+
+{% block contenido %}
+
+<!-- Header del Catálogo -->
+<div class="encabezado-pagina">
+    <div class="contenedor-pagina">
+        <div class="breadcrumb">
+            <a href="/">Inicio</a> <span class="separador">/</span> <span class="actual">Catálogo</span>
+        </div>
+        <h1 class="titulo-pagina"><i class="fas fa-th"></i> Catálogo de Productos</h1>
+        <p class="descripcion-pagina">Explora nuestro amplio catálogo de productos de calidad</p>
+    </div>
+</div>
+
+<!-- Contenedor Principal -->
+<section class="seccion-catalogo">
+    <div class="contenedor-pagina">
+        <div class="layout-catalogo">
+            <!-- Barra Lateral de Filtros -->
+            <aside class="barra-lateral-filtros">
+                <div class="seccion-filtros">
+                    <h3 class="titulo-filtro">Filtrar por Categoría</h3>
+                    <div class="lista-filtros">
+                        <a href="/catalogo" class="item-filtro {% if not categoria_activa %}activo{% endif %}">
+                            <span class="icono-filtro"><i class="fas fa-list-alt"></i></span>
+                            Todas las categorías
+                        </a>
+                        {% for categoria in categorias %}
+                        <a href="/catalogo?categoria={{ categoria.nombre }}" 
+                           class="item-filtro {% if categoria.nombre == categoria_activa %}activo{% endif %}">
+                            <span class="icono-filtro"><i class="fas fa-check-circle"></i></span>
+                            {{ categoria.nombre }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="seccion-filtros">
+                    <h3 class="titulo-filtro">Rango de Precio</h3>
+                    <div class="rango-precio">
+                        <input type="range" id="rangoMin" class="slider-precio" min="0" max="1000" value="0">
+                        <input type="range" id="rangoMax" class="slider-precio" min="0" max="1000" value="1000">
+                        <div class="valores-precio">
+                            <span id="valorMin">$0</span> - <span id="valorMax">$1000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="seccion-filtros">
+                    <h3 class="titulo-filtro">Ordenar Por</h3>
+                    <select id="selectOrdenar" class="select-ordenar">
+                        <option value="relevancia">Relevancia</option>
+                        <option value="precio-menor">Precio: Menor a Mayor</option>
+                        <option value="precio-mayor">Precio: Mayor a Menor</option>
+                        <option value="nombre-az">Nombre: A a Z</option>
+                        <option value="nombre-za">Nombre: Z a A</option>
+                        <option value="nuevo">Más Nuevos</option>
+                    </select>
+                </div>
+            </aside>
+            
+            <!-- Área de Productos -->
+            <div class="area-productos">
+                <!-- Barra Superior con Información -->
+                <div class="barra-superior-catalogo">
+                    <div class="info-resultado">
+                        <p>Mostrando <strong>{{ productos | length }}</strong> producto(s)
+                        {% if categoria_activa %} en <strong>{{ categoria_activa }}</strong>{% endif %}
+                        </p>
+                    </div>
+                    <div class="opciones-vista">
+                        <button class="boton-vista activo" title="Vista de Cuadrícula">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="boton-vista" title="Vista de Lista">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Grid de Productos -->
+                <div class="grid-catalogo">
+                    {% if productos %}
+                        {% for producto in productos %}
+                        <div class="tarjeta-producto-catalogo" data-precio="{{ producto.precio }}">
+                            <div class="contenedor-imagen">
+                                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" class="imagen-catalogo">
+                                <div class="etiquetas-producto">
+                                    {% if producto.destacado %}
+                                    <span class="etiqueta etiqueta-destacado">
+                                        <i class="fas fa-fire"></i> Destacado
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                <div class="overlay-catalogo">
+                                    <button class="boton boton-principal" onclick="verDetallesProducto({{ producto.id }})">
+                                        <i class="fas fa-eye"></i> Ver Detalles
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="contenido-tarjeta">
+                                <span class="categoria-catalogo">{{ producto.categoria }}</span>
+                                <h3 class="nombre-catalogo">{{ producto.nombre }}</h3>
+                                <p class="descripcion-catalogo">{{ producto.descripcion }}</p>
+                                <div class="calificacion">
+                                    <div class="estrellas">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="texto-calificacion">({{ [234, 156, 89, 342, 201, 178, 267, 145, 198, 223, 189, 312, 267, 134, 278, 156][loop.index0 % 16] }} reseñas)</span>
+                                </div>
+                                <div class="pie-tarjeta-catalogo">
+                                    <span class="precio-catalogo">${{ "%.2f" | format(producto.precio) }}</span>
+                                    <button class="boton-carrito-catalogo" onclick="agregarAlCarrito({{ producto.id }}, '{{ producto.nombre }}', {{ producto.precio }})">
+                                        <i class="fas fa-shopping-cart"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <div class="sin-productos">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No hay productos disponibles</h3>
+                        <p>Intenta con otra categoría o criterio de búsqueda</p>
+                        <a href="/catalogo" class="boton boton-principal">Ver todos los productos</a>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Paginación (placeholder) -->
+                <div class="paginacion">
+                    <button class="boton-paginacion anterior" title="Página anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="numero-pagina activo">1</button>
+                    <button class="numero-pagina">2</button>
+                    <button class="numero-pagina">3</button>
+                    <span class="puntos-suspension">...</span>
+                    <button class="numero-pagina">10</button>
+                    <button class="boton-paginacion siguiente" title="Página siguiente">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal de Detalles Rápidos (placeholder) -->
+<div class="modal-detalles" id="modalDetalles">
+    <div class="contenido-modal">
+        <button class="btn-cerrar-modal" onclick="cerrarModal()">&times;</button>
+        <div class="cuerpo-modal">
+            <div class="imagen-modal">
+                <img id="imagenModal" src="" alt="">
+            </div>
+            <div class="info-modal">
+                <h2 id="nombreModal"></h2>
+                <p id="descripcionModal"></p>
+                <span id="precioModal" class="precio-modal"></span>
+                <button class="boton boton-principal" onclick="agregarAlCarritoDesdeModal()">
+                    <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts_adicionales %}
+<script>
+    // Variables globales
+    let allProductos = {{ productos|tojson }};
+    
+    // Función para ver detalles del producto
+    function verDetallesProducto(productoId) {
+        const producto = allProductos.find(p => p.id === productoId);
+        if (producto) {
+            document.getElementById('imagenModal').src = producto.imagen;
+            document.getElementById('nombreModal').textContent = producto.nombre;
+            document.getElementById('descripcionModal').textContent = producto.descripcion;
+            document.getElementById('precioModal').textContent = '$' + producto.precio.toFixed(2);
+            document.getElementById('modalDetalles').classList.add('activo');
+        }
+    }
+    
+    // Cerrar modal de detalles
+    function cerrarModal() {
+        document.getElementById('modalDetalles').classList.remove('activo');
+    }
+    
+    // Agregar al carrito desde modal
+    function agregarAlCarritoDesdeModal() {
+        const nombre = document.getElementById('nombreModal').textContent;
+        const precio = parseFloat(document.getElementById('precioModal').textContent.replace('$', ''));
+        agregarAlCarrito(0, nombre, precio);
+        cerrarModal();
+    }
+    
+    // Función para agregar al carrito (desde catalogo)
+    function agregarAlCarrito(id, nombre, precio) {
+        fetch('/api/agregar-carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                producto_id: id,
+                nombre: nombre,
+                precio: precio,
+                cantidad: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            mostrarNotificacionAgregar('✓ ' + nombre + ' agregado al carrito');
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Mostrar notificación de agregado
+    function mostrarNotificacionAgregar(mensaje) {
+        const notif = document.createElement('div');
+        notif.className = 'notificacion-agregar';
+        notif.innerHTML = '<i class="fas fa-check-circle"></i> ' + mensaje;
+        document.body.appendChild(notif);
+        
+        setTimeout(() => {
+            notif.classList.add('mostrar');
+        }, 10);
+        
+        setTimeout(() => {
+            notif.classList.remove('mostrar');
+            setTimeout(() => notif.remove(), 300);
+        }, 3000);
+    }
+    
+    // Manejo de rango de precio
+    const rangoMin = document.getElementById('rangoMin');
+    const rangoMax = document.getElementById('rangoMax');
+    const valorMin = document.getElementById('valorMin');
+    const valorMax = document.getElementById('valorMax');
+    
+    rangoMin.addEventListener('input', function() {
+        if(parseInt(this.value) < parseInt(rangoMax.value)) {
+            valorMin.textContent = '$' + this.value;
+        }
+    });
+    
+    rangoMax.addEventListener('input', function() {
+        if(parseInt(this.value) > parseInt(rangoMin.value)) {
+            valorMax.textContent = '$' + this.value;
+        }
+    });
+    
+    // Manejo de ordenamiento
+    document.getElementById('selectOrdenar').addEventListener('change', function(e) {
+        console.log('Ordenando por:', e.target.value);
+        // Aquí iría la lógica de ordenamiento
+    });
+    
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('modalDetalles').addEventListener('click', function(e) {
+        if(e.target === this) {
+            cerrarModal();
+        }
+    });
+</script>
+{% endblock %}

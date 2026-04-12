@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Inicio - TechStore | Tienda Online{% endblock %}
+
+{% block contenido %}
+
+<!-- Sección Hero Principal -->
+<section class="seccion-hero">
+    <div class="contenedor-hero">
+        <div class="contenido-hero">
+            <h1 class="titulo-hero">Bienvenido a TechStore</h1>
+            <p class="subtitulo-hero">Descubre los mejores productos de tecnología, moda y hogar a precios incomparables</p>
+            <div class="botones-hero">
+                <a href="/catalogo" class="boton boton-principal">
+                    <i class="fas fa-shopping-cart"></i> Explorar Catálogo
+                </a>
+                <a href="/categorias" class="boton boton-secundario">
+                    <i class="fas fa-list"></i> Ver Categorías
+                </a>
+            </div>
+        </div>
+        <div class="imagen-hero">
+            <div class="contenedor-imagen-hero">
+                <i class="fas fa-shopping-bags"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Características -->
+<section class="seccion-caracteristicas">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">¿Por qué elegirnos?</h2>
+        <div class="grid-caracteristicas">
+            <div class="tarjeta-caracteristica">
+                <div class="icono-caracteristica">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h3>Envío Rápido</h3>
+                <p>Entrega en 24-48 horas a cualquier lugar del país</p>
+            </div>
+            <div class="tarjeta-caracteristica">
+                <div class="icono-caracteristica">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Compra Segura</h3>
+                <p>Tu privacidad y seguridad son nuestra prioridad</p>
+            </div>
+            <div class="tarjeta-caracteristica">
+                <div class="icono-caracteristica">
+                    <i class="fas fa-undo"></i>
+                </div>
+                <h3>Devoluciones Fáciles</h3>
+                <p>30 días para devolver productos sin preguntas</p>
+            </div>
+            <div class="tarjeta-caracteristica">
+                <div class="icono-caracteristica">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Soporte 24/7</h3>
+                <p>Atención al cliente disponible siempre para ti</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Productos Destacados -->
+<section class="seccion-destacados">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">Productos Destacados</h2>
+        <p class="subtitulo-seccion">Nuestros artículos más populares esta semana</p>
+        
+        <div class="grid-productos">
+            {% for producto in productos_destacados %}
+            <div class="tarjeta-producto" data-producto-id="{{ producto.id }}">
+                <div class="imagen-producto">
+                    <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" class="img-producto">
+                    <div class="overlay-imagen">
+                        <button class="boton boton-pequeno" onclick="verDetalles({{ producto.id }})">
+                            <i class="fas fa-eye"></i> Ver más
+                        </button>
+                    </div>
+                    <span class="badge-destacado"><i class="fas fa-star"></i> Destacado</span>
+                </div>
+                <div class="info-producto">
+                    <span class="categoria-producto">{{ producto.categoria }}</span>
+                    <h3 class="nombre-producto">{{ producto.nombre }}</h3>
+                    <p class="descripcion-producto">{{ producto.descripcion }}</p>
+                    <div class="pie-tarjeta-producto">
+                        <span class="precio-producto">${{ "%.2f" | format(producto.precio) }}</span>
+                        <button class="boton-carrito" onclick="agregarAlCarrito({{ producto.id }}, '{{ producto.nombre }}', {{ producto.precio }})">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Categorías Destacadas -->
+<section class="seccion-categorias">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">Nuestras Categorías</h2>
+        <p class="subtitulo-seccion">Explora todos nuestros departamentos</p>
+        
+        <div class="grid-categorias">
+            {% for categoria in categorias[:6] %}
+            <a href="/catalogo?categoria={{ categoria.nombre }}" class="tarjeta-categoria">
+                <div class="imagen-categoria">
+                    <img src="{{ categoria.imagen }}" alt="{{ categoria.nombre }}" class="img-categoria">
+                    <div class="overlay-categoria"></div>
+                </div>
+                <div class="contenido-categoria">
+                    <h3>{{ categoria.nombre }}</h3>
+                    <p>{{ categoria.descripcion }}</p>
+                    <span class="enlace-categoria">Explorar <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Banner Promocional -->
+<section class="seccion-promocion">
+    <div class="contenedor-pagina">
+        <div class="banner-promocional">
+            <div class="contenido-banner">
+                <h2>¡Oferta Especial!</h2>
+                <p>Obtén hasta un 40% de descuento en artículos seleccionados</p>
+                <div class="codigo-promocion">
+                    <span class="etiqueta-codigo">Código:</span>
+                    <code class="codigo">TECHSTORE40</code>
+                    <button class="boton-copiar" onclick="copiarCodigo('TECHSTORE40')">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+            </div>
+            <div class="icono-banner">
+                <i class="fas fa-tag"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Testimonio/Reseñas -->
+<section class="seccion-testimonios">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">Lo que dicen nuestros clientes</h2>
+        
+        <div class="grid-testimonios">
+            <div class="tarjeta-testimonio">
+                <div class="estrellas">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="texto-testimonio">"Excelente calidad de productos y muy rápido el envío. Volveré a comprar sin dudarlo."</p>
+                <div class="autor-testimonio">
+                    <h4>María González</h4>
+                    <p>Cliente verificado</p>
+                </div>
+            </div>
+            
+            <div class="tarjeta-testimonio">
+                <div class="estrellas">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="texto-testimonio">"Atención al cliente impecable. Resolvieron todas mis dudas con profesionalismo."</p>
+                <div class="autor-testimonio">
+                    <h4>Carlos Rodríguez</h4>
+                    <p>Cliente verificado</p>
+                </div>
+            </div>
+            
+            <div class="tarjeta-testimonio">
+                <div class="estrellas">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+                <p class="texto-testimonio">"La mejor tienda online que he encontrado. Recomendado 100% a todos mis amigos."</p>
+                <div class="autor-testimonio">
+                    <h4>Ana Martínez</h4>
+                    <p>Cliente verificado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Suscripción a Newsletter -->
+<section class="seccion-newsletter">
+    <div class="contenedor-pagina">
+        <div class="contenedor-newsletter">
+            <div class="contenido-newsletter">
+                <h2>Suscríbete a nuestro Newsletter</h2>
+                <p>Recibe updates sobre nuevos productos y ofertas exclusivas</p>
+            </div>
+            <form class="formulario-newsletter" id="formularioNewsletter">
+                <input type="email" placeholder="Tu correo electrónico" required class="input-newsletter">
+                <button type="submit" class="boton boton-principal">Suscribirse</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts_adicionales %}
+<script>
+    // Función para ver detalles del producto (placeholder)
+    function verDetalles(productoId) {
+        console.log('Ver detalles del producto:', productoId);
+        alert('Sección de detalles del producto - ID: ' + productoId);
+    }
+    
+    // Función para agregar al carrito
+    function agregarAlCarrito(id, nombre, precio) {
+        console.log('Producto agregado:', nombre);
+        fetch('/api/agregar-carrito', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                producto_id: id,
+                nombre: nombre,
+                precio: precio,
+                cantidad: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            mostrarNotificacion('✓ ' + nombre + ' agregado al carrito');
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+    // Función para copiar código de promoción
+    function copiarCodigo(codigo) {
+        navigator.clipboard.writeText(codigo);
+        alert('Código copiado: ' + codigo);
+    }
+    
+    // Función para mostrar notificaciones
+    function mostrarNotificacion(mensaje) {
+        const notif = document.createElement('div');
+        notif.className = 'notificacion';
+        notif.textContent = mensaje;
+        document.body.appendChild(notif);
+        
+        setTimeout(() => {
+            notif.classList.add('mostrar');
+        }, 10);
+        
+        setTimeout(() => {
+            notif.classList.remove('mostrar');
+            setTimeout(() => notif.remove(), 300);
+        }, 3000);
+    }
+    
+    // Manejo del formulario de newsletter
+    document.getElementById('formularioNewsletter').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = this.querySelector('.input-newsletter').value;
+        console.log('Email suscrito:', email);
+        mostrarNotificacion('¡Gracias por suscribirte!');
+        this.reset();
+    });
+</script>
+{% endblock %}

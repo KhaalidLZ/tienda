@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Categorías - TechStore{% endblock %}
+
+{% block contenido %}
+
+<!-- Header de Categorías -->
+<div class="encabezado-pagina">
+    <div class="contenedor-pagina">
+        <div class="breadcrumb">
+            <a href="/">Inicio</a> <span class="separador">/</span> <span class="actual">Categorías</span>
+        </div>
+        <h1 class="titulo-pagina"><i class="fas fa-list"></i> Nuestras Categorías</h1>
+        <p class="descripcion-pagina">Explora todos nuestros departamentos y encuentra lo que buscas</p>
+    </div>
+</div>
+
+<!-- Sección de Categorías Principal -->
+<section class="seccion-categorias-principal">
+    <div class="contenedor-pagina">
+        <!-- Grid de Categorías Grande -->
+        <div class="grid-categorias-grande">
+            {% for categoria in categorias %}
+            <div class="tarjeta-categoria-grande" data-categoria-id="{{ categoria.id }}">
+                <div class="contenedor-imagen-categoria">
+                    <img src="{{ categoria.imagen }}" alt="{{ categoria.nombre }}" class="img-categoria-grande">
+                    <div class="overlay-categoria-grande"></div>
+                </div>
+                <div class="contenido-categoria-grande">
+                    <div class="info-categoria">
+                        <h2>{{ categoria.nombre }}</h2>
+                        <p>{{ categoria.descripcion }}</p>
+                    </div>
+                    <a href="/catalogo?categoria={{ categoria.nombre }}" class="boton boton-principal">
+                        <i class="fas fa-arrow-right"></i> Explorar Categoría
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Sección Alternativa: Estadísticas de Categorías -->
+<section class="seccion-estadisticas-categorias">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">Conoce nuestras categorías</h2>
+        <div class="grid-estadisticas">
+            {% for categoria in categorias %}
+            <div class="tarjeta-estadistica">
+                <div class="icono-estadistica">
+                    {% if categoria.id == 1 %}
+                        <i class="fas fa-laptop"></i>
+                    {% elif categoria.id == 2 %}
+                        <i class="fas fa-tshirt"></i>
+                    {% elif categoria.id == 3 %}
+                        <i class="fas fa-home"></i>
+                    {% elif categoria.id == 4 %}
+                        <i class="fas fa-dumbbell"></i>
+                    {% elif categoria.id == 5 %}
+                        <i class="fas fa-book"></i>
+                    {% elif categoria.id == 6 %}
+                        <i class="fas fa-spa"></i>
+                    {% else %}
+                        <i class="fas fa-box"></i>
+                    {% endif %}
+                </div>
+                <h3>{{ categoria.nombre }}</h3>
+                <p>{{ categoria.descripcion }}</p>
+                <div class="contador-productos">
+                    <span class="numero-productos" data-categoria="{{ categoria.nombre }}">12+</span>
+                    <span class="etiqueta-productos">productos disponibles</span>
+                </div>
+                <a href="/catalogo?categoria={{ categoria.nombre }}" class="enlace-categoria-grande">
+                    Ver todos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Características por Categoría -->
+<section class="seccion-caracteristicas-categorias">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">¿Qué puedes encontrar?</h2>
+        
+        <div class="contenedor-caracteristicas-flex">
+            <div class="caracteristica-item">
+                <div class="icono-caracteristica-cat">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <h3>Amplia Variedad</h3>
+                <p>Miles de productos para elegir de las mejores marcas</p>
+            </div>
+            <div class="caracteristica-item">
+                <div class="icono-caracteristica-cat">
+                    <i class="fas fa-check-double"></i>
+                </div>
+                <h3>Calidad Garantizada</h3>
+                <p>Todos nuestros productos han pasado rigurosos controles de calidad</p>
+            </div>
+            <div class="caracteristica-item">
+                <div class="icono-caracteristica-cat">
+                    <i class="fas fa-percent"></i>
+                </div>
+                <h3>Mejores Precios</h3>
+                <p>Ofertas especiales y promociones exclusivas en cada categoría</p>
+            </div>
+            <div class="caracteristica-item">
+                <div class="icono-caracteristica-cat">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Asesoramiento Gratuito</h3>
+                <p>Nuestros expertos están listos para ayudarte a elegir el producto ideal</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección de Recomendaciones por Categoría -->
+<section class="seccion-recomendaciones">
+    <div class="contenedor-pagina">
+        <h2 class="titulo-seccion">Categorías Recomendadas esta Semana</h2>
+        
+        <div class="carousel-recomendaciones">
+            <div class="tarjeta-recomendacion">
+                <div class="insignia-recomendacion">
+                    <i class="fas fa-star"></i> Trending
+                </div>
+                <div class="contenedor-imagen-rec">
+                    <img src="/static/images/electronica.jpg" alt="Electrónica Trending">
+                </div>
+                <div class="contenido-recomendacion">
+                    <h3>Electrónica</h3>
+                    <p>Dispositivos de última generación que van a transformar tu vida digital</p>
+                    <a href="/catalogo?categoria=Electrónica" class="boton boton-secundario">
+                        Descubrir más
+                    </a>
+                </div>
+            </div>
+            
+            <div class="tarjeta-recomendacion">
+                <div class="insignia-recomendacion">
+                    <i class="fas fa-fire"></i> Popular
+                </div>
+                <div class="contenedor-imagen-rec">
+                    <img src="/static/images/deportes.jpg" alt="Deportes y Fitness">
+                </div>
+                <div class="contenido-recomendacion">
+                    <h3>Deportes y Fitness</h3>
+                    <p>Equipo deportivo profesional para mantener un estilo de vida activo</p>
+                    <a href="/catalogo?categoria=Deportes y Fitness" class="boton boton-secundario">
+                        Descubrir más
+                    </a>
+                </div>
+            </div>
+            
+            <div class="tarjeta-recomendacion">
+                <div class="insignia-recomendacion">
+                    <i class="fas fa-gift"></i> Ofertas
+                </div>
+                <div class="contenedor-imagen-rec">
+                    <img src="/static/images/belleza.jpg" alt="Belleza y Cuidado">
+                </div>
+                <div class="contenido-recomendacion">
+                    <h3>Belleza y Cuidado</h3>
+                    <p>Productos premium con descuentos especiales esta semana</p>
+                    <a href="/catalogo?categoria=Belleza y Cuidado" class="boton boton-secundario">
+                        Descubrir más
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Sección Call-to-Action -->
+<section class="seccion-cta-categorias">
+    <div class="contenedor-pagina">
+        <div class="contenedor-cta">
+            <h2>¿No encuentras lo que buscas?</h2>
+            <p>Utiliza nuestro buscador o contacta a nuestro equipo de atención al cliente</p>
+            <div class="botones-cta">
+                <a href="/catalogo" class="boton boton-principal">
+                    <i class="fas fa-search"></i> Ir al Catálogo Completo
+                </a>
+                <button class="boton boton-secundario" onclick="mostrarFormularioContacto()">
+                    <i class="fas fa-envelope"></i> Contactar Soporte
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal de Contacto Simple -->
+<div class="modal-contacto" id="modalContacto">
+    <div class="contenido-modal-contacto">
+        <button class="btn-cerrar" onclick="cerrarFormularioContacto()">&times;</button>
+        <h2>Formulario de Contacto</h2>
+        <form id="formularioContacto">
+            <div class="grupo-formulario">
+                <label for="nombreContacto">Nombre:</label>
+                <input type="text" id="nombreContacto" name="nombre" required>
+            </div>
+            <div class="grupo-formulario">
+                <label for="emailContacto">Correo Electrónico:</label>
+                <input type="email" id="emailContacto" name="email" required>
+            </div>
+            <div class="grupo-formulario">
+                <label for="mensajeContacto">Consulta:</label>
+                <textarea id="mensajeContacto" name="mensaje" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="boton boton-principal">Enviar Consulta</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts_adicionales %}
+<script>
+    // Funciones para el modal de contacto
+    function mostrarFormularioContacto() {
+        document.getElementById('modalContacto').classList.add('activo');
+    }
+    
+    function cerrarFormularioContacto() {
+        document.getElementById('modalContacto').classList.remove('activo');
+    }
+    
+    // Manejo del formulario de contacto
+    document.getElementById('formularioContacto').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nombre = document.getElementById('nombreContacto').value;
+        console.log('Formulario de contacto enviado:', nombre);
+        mostrarNotificacionContacto('¡Gracias por tu mensaje! Te contactaremos pronto.');
+        this.reset();
+        cerrarFormularioContacto();
+    });
+    
+    function mostrarNotificacionContacto(mensaje) {
+        const notif = document.createElement('div');
+        notif.className = 'notificacion-contacto';
+        notif.innerHTML = '<i class="fas fa-check-circle"></i> ' + mensaje;
+        document.body.appendChild(notif);
+        
+        setTimeout(() => {
+            notif.classList.add('mostrar');
+        }, 10);
+        
+        setTimeout(() => {
+            notif.classList.remove('mostrar');
+            setTimeout(() => notif.remove(), 300);
+        }, 4000);
+    }
+    
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('modalContacto').addEventListener('click', function(e) {
+        if(e.target === this) {
+            cerrarFormularioContacto();
+        }
+    });
+</script>
+{% endblock %}
